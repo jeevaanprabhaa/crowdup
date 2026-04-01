@@ -12,6 +12,7 @@ import {
     SignupPage
 } from "../pages";
 import {DashboardLayout, PublicLayout} from "../layout";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const router = createBrowserRouter([
     {
@@ -67,7 +68,7 @@ const router = createBrowserRouter([
     },
     {
         path: "dashboard",
-        element: <DashboardLayout/>,
+        element: <ProtectedRoute><DashboardLayout/></ProtectedRoute>,
         errorElement: <Error404Page/>,
         children: [
             {
@@ -79,7 +80,7 @@ const router = createBrowserRouter([
     },
     {
         path: "create-campaign",
-        element: <DashboardLayout/>,
+        element: <ProtectedRoute><DashboardLayout/></ProtectedRoute>,
         errorElement: <Error404Page/>,
         children: [
             {

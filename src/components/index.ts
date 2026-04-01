@@ -23,6 +23,7 @@ import BackButton from "./BackButton";
 import CategorySelect from "./CategorySelect";
 import SearchDrawer from "./SearchDrawer";
 import AppNavbar from "./AppNavbar";
+import ProtectedRoute from "./ProtectedRoute";
 
 export {
     LandingNavbar,
@@ -49,5 +50,6 @@ export {
     BackButton,
     CategorySelect,
     SearchDrawer,
-    AppNavbar
+    AppNavbar,
+    ProtectedRoute
 };

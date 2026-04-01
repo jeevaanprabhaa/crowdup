@@ -1,19 +1,43 @@
+import { useState } from 'react';
 import {
     TextInput,
     PasswordInput,
-    Checkbox,
     Anchor,
     Paper,
     Title,
     Text,
     Container,
-    Group,
-    Button, Divider,
+    Button,
+    Alert,
 } from '@mantine/core';
-import {Helmet} from "react-helmet";
-import {IconBrandFacebook, IconBrandGoogle} from "@tabler/icons-react";
+import { Helmet } from "react-helmet";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { IconAlertCircle } from '@tabler/icons-react';
 
 const LoginPage = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const { signIn } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            await signIn(email, password);
+            navigate('/dashboard');
+        } catch (err: any) {
+            setError(err.message || 'Failed to sign in. Please check your credentials.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <Helmet>
@@ -28,28 +52,38 @@ const LoginPage = () => {
                 </Title>
                 <Text color="dimmed" size="sm" align="center" mt={5}>
                     Do not have an account yet?{' '}
-                    <Anchor size="sm" component="button">
+                    <Anchor size="sm" component={Link} to="/signup">
                         Create account
                     </Anchor>
                 </Text>
 
                 <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                    <Group grow mb="md" mt="md">
-                        <Button radius="xl" leftIcon={<IconBrandFacebook size={18}/>}>Facebook</Button>
-                        <Button radius="xl" leftIcon={<IconBrandGoogle size={18}/>}>Google</Button>
-                    </Group>
-                    <Divider label="Or continue with email" labelPosition="center" my="lg" />
-                    <TextInput label="Email" placeholder="you@mantine.dev" required />
-                    <PasswordInput label="Password" placeholder="Your password" required mt="md" />
-                    <Group position="apart" mt="lg">
-                        <Checkbox label="Remember me" />
-                        <Anchor component="button" size="sm">
-                            Forgot password?
-                        </Anchor>
-                    </Group>
-                    <Button fullWidth mt="xl">
-                        Sign in
-                    </Button>
+                    {error && (
+                        <Alert icon={<IconAlertCircle size={16} />} color="red" mb="md">
+                            {error}
+                        </Alert>
+                    )}
+
+                    <form onSubmit={handleSubmit}>
+                        <TextInput
+                            label="Email"
+                            placeholder="you@example.com"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <PasswordInput
+                            label="Password"
+                            placeholder="Your password"
+                            required
+                            mt="md"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Button fullWidth mt="xl" type="submit" loading={loading}>
+                            Sign in
+                        </Button>
+                    </form>
                 </Paper>
             </Container>
         </>

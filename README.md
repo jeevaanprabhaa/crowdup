@@ -1,80 +1,171 @@
-![image](https://github.com/design-sparx/crowdup/assets/26582923/001cd476-c753-4087-96a6-ee8c99fc3612)
+# CrowdUp - Production-Ready Full-Stack Crowdfunding Platform
 
-# Crowdfunding website project
+A complete crowdfunding application built with React, TypeScript, Supabase, and Stripe.
 
-[Online Demo](https://crowd-up.netlify.app/ "Online Demo")
+## 🚀 What's Included
 
-### About:
+This is a **fully functional startup-ready** crowdfunding platform where users can:
+- ✅ Create accounts and authenticate securely
+- ✅ Browse and search fundraising campaigns
+- ✅ Create campaigns with goals, deadlines, and categories
+- ✅ Make real donations using Stripe payments
+- ✅ Track donations and campaign progress in real-time
+- ✅ Manage dashboard with campaign analytics
 
-CrowdUp is a crowdfunding platform that helps you get funding for your personal projects, charities, and NGOs. Start a fundraiser and receive donations from individuals who care about your cause.
+## ✨ Key Features
 
-#### Available Pages
+- **Real Authentication** - Supabase Auth with JWT tokens
+- **Secure Database** - PostgreSQL with Row Level Security
+- **Payment Processing** - Stripe integration for donations
+- **Protected Routes** - Auth guards on dashboard/create pages
+- **Real-time Updates** - Automatic campaign amount updates
+- **Responsive Design** - Mobile-friendly Mantine UI
 
-1. Home
-2. How it works
-3. Campaigns
-4. Campaign details
-5. Create campaigns
-6. Dashboard
+## 🏗️ Tech Stack
 
-### Tech Stack:
+**Frontend:**
+- React 18 + TypeScript
+- Vite (fast development)
+- Mantine UI v6
+- React Router v6
+- Stripe React
 
-- embla-carousel-react v7 - https://www.embla-carousel.com/get-started/
-- mantine v6 - https://mantine.dev/pages/getting-started/
-- react v18 - https://reactjs.org/docs/getting-started.html
-- tabler-icons v2- https://react-icons.github.io/react-icons/
+**Backend:**
+- Supabase (PostgreSQL + Auth + Edge Functions)
+- Stripe API
+- Row Level Security
+- Serverless architecture
 
-**Dev dependencies**
+## 📦 Quick Start
 
-- eslint v8 - https://eslint.org/docs/latest/user-guide/getting-started- 
-- vite v4 - https://vitejs.dev/
+### 1. Install Dependencies
 
-### Software
+```bash
+npm install --legacy-peer-deps
+```
 
-Before proceeding, please ensure you have the following software installed on your computer.
+### 2. Configure Stripe
 
-- Node
-- Yarn (optional but recommended)
-- Git command line tools
+**Get Stripe Keys:**
+1. Visit [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys)
+2. Copy your **Publishable key** (pk_test_...)
+3. Copy your **Secret key** (sk_test_...)
 
-### Useful links
+**Add to Supabase:**
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Navigate to: Edge Functions → Secrets
+3. Add: `STRIPE_SECRET_KEY` = your secret key
 
-- Download Git cli -
-    - Windows: https://git-scm.com/download/windows
-    - Mac: https://git-scm.com/download/mac
-- Download Node - https://nodejs.org/en/
-- Download Yarn cli - https://yarnpkg.com/lang/en/docs/install/
-- Download VSCode - https://code.visualstudio.com/
+**Update `.env`:**
+```env
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
+```
 
-### Getting started
+### 3. Run Application
 
-Please fork a copy of this repository. Forking a repository allows you to freely experiment with changes without affecting the original project. Alternatively download or clone the master branch.
+```bash
+npm run dev
+```
 
-##### Download & Install Dependencies on your machine
+Visit **http://localhost:5173**
 
-Clone the repo to your machine
-`git clone <CloneURL>`
+### 4. Test with Stripe
 
-##### Launch the frontend
+Use test card: **4242 4242 4242 4242**
+- Any future expiry
+- Any 3-digit CVV
+- Any postal code
 
-1. Open a new terminal window and navigate in your root folder
-   `cd <../root>`
-   `yarn install OR npm install`
-2. Run the start script
-   `yarn run start OR npm run start`
+## 📁 Project Structure
 
-Your app should be running on: http://localhost:3000
+```
+src/
+├── config/
+│   └── supabase.ts              # Supabase client
+├── contexts/
+│   └── AuthContext.tsx          # Auth state management
+├── services/
+│   ├── auth.service.ts          # User authentication
+│   ├── campaigns.service.ts     # Campaign CRUD
+│   ├── donations.service.ts     # Donations management
+│   └── payment.service.ts       # Stripe payments
+├── components/
+│   └── ProtectedRoute.tsx       # Auth guard
+├── pages/
+│   ├── Login.tsx                # User login
+│   ├── Signup.tsx               # Registration
+│   ├── Campaigns.tsx            # Browse campaigns
+│   ├── CampaignDetails.tsx      # Single campaign
+│   ├── CreateCampaign.tsx       # Create fundraiser
+│   └── Dashboard.tsx            # User dashboard
+supabase/functions/
+└── create-payment-intent/       # Stripe Edge Function
+```
 
-### Versions
+## 🗄️ Database
 
-v1.0
+**Tables (all with RLS enabled):**
+- `profiles` - User accounts
+- `campaigns` - Fundraising campaigns
+- `donations` - Payment records
 
-- Default project implementation
+**Features:**
+- Automatic campaign amount updates via triggers
+- Secure policies for data isolation
+- User-scoped data access
 
-### Authors
+## 🔐 Security
 
-1. Kelvin Kiptum Kiprop - https://github.com/kelvink96
+- JWT authentication
+- Row Level Security on all tables
+- Protected API routes
+- Secure payment processing
+- Password hashing
 
-### License
+## 🧪 Testing
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/kelvink96ltd/flick-city/blob/master/LICENSE.md) file for details
+**Create test account** - Use signup page
+
+**Test donations:**
+- Success: 4242 4242 4242 4242
+- Decline: 4000 0000 0000 0002
+
+## 📖 Documentation
+
+See **SETUP.md** for:
+- Detailed setup guide
+- API documentation
+- Database schema
+- Troubleshooting
+- Deployment instructions
+
+## 🚀 Build & Deploy
+
+```bash
+# Build for production
+npm run build
+
+# Preview build
+npm run preview
+```
+
+**Deploy:**
+- Frontend: Netlify/Vercel (deploy `dist/` folder)
+- Backend: Already deployed on Supabase
+- Set environment variables in hosting dashboard
+
+## 🛠️ Troubleshooting
+
+**Install fails:**
+```bash
+npm install --legacy-peer-deps
+```
+
+**Port in use:**
+```bash
+npx kill-port 5173
+```
+
+## 📄 License
+
+MIT License
