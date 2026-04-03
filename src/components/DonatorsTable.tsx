@@ -1,14 +1,13 @@
 import {useEffect, useState} from "react";
 import campaignsData from "../data/Campaigns.json";
-import {DataTable} from "mantine-datatable";
 import {ICampaign} from "../types";
-import {Avatar, Group, Text} from "@mantine/core";
+import {Avatar, Group, Text, Table, Pagination, Container, Flex} from "@mantine/core";
 
 const PAGE_SIZE = 10;
 
 const DonatorsTable = () => {
     const [page, setPage] = useState(1);
-    const [records, setRecords] = useState(campaignsData.data.slice(0, PAGE_SIZE));
+    const [records, setRecords] = useState<ICampaign[]>(campaignsData.data.slice(0, PAGE_SIZE));
 
     useEffect(() => {
         const from = (page - 1) * PAGE_SIZE;
@@ -16,29 +15,39 @@ const DonatorsTable = () => {
         setRecords(campaignsData.data.slice(from, to));
     }, [page]);
 
+    const rows = records.map((record: ICampaign) => (
+        <tr key={record.title}>
+            <td>
+                <Group spacing="sm">
+                    <Avatar src={record.createdByImage} alt={`${record.createdBy} profile avatar`} size="sm" radius="xl"/>
+                    <Text size="sm">{record.createdBy}</Text>
+                </Group>
+            </td>
+            <td>{record.amountRaised}</td>
+            <td>{record.country}</td>
+        </tr>
+    ));
+
+    const totalPages = Math.ceil(campaignsData.data.length / PAGE_SIZE);
+
     return (
-        <DataTable
-            columns={[
-                {
-                    accessor: 'createdBy',
-                    render: ({createdBy, createdByImage}: ICampaign) =>
-                        <Group>
-                            <Avatar src={createdByImage} alt={`${createdBy} profile avatar`} size="sm" radius="xl"/>
-                            <Text>{createdBy}</Text>
-                        </Group>
-                },
-                {accessor: 'amountRaised'},
-                {accessor: 'country'}
-            ]}
-            records={records}
-            totalRecords={campaignsData.data.length}
-            recordsPerPage={PAGE_SIZE}
-            page={page}
-            onPageChange={(p) => setPage(p)}
-            highlightOnHover
-            verticalSpacing="sm"
-            striped
-        />
+        <Container>
+            <div style={{ overflowX: 'auto' }}>
+                <Table striped highlightOnHover>
+                    <thead>
+                        <tr>
+                            <th>Donor</th>
+                            <th>Amount Raised</th>
+                            <th>Country</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </Table>
+            </div>
+            <Flex justify="center" mt="md">
+                <Pagination value={page} onChange={setPage} total={totalPages} />
+            </Flex>
+        </Container>
     );
 };
 
